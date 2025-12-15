@@ -1,0 +1,193 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ABC Music Notation App Tests should have a consistent snapshot 1`] = `
+<div>
+  <div
+    class="scrollContainer"
+  >
+    <div
+      class="jv_R6g"
+      style="--NZu1Zw: 16px;"
+    >
+      <ul
+        class="jv_R6g"
+        role="list"
+        style="--NZu1Zw: 16px;"
+      >
+        <li
+          aria-hidden="true"
+        >
+          <hr
+            class="_PhRSQ"
+          />
+        </li>
+        <li
+          class="TV2qbA BMOCzQ LuBWVA"
+        >
+          <div
+            aria-level="4"
+            role="heading"
+          >
+            <button
+              aria-controls="_r_9_"
+              aria-expanded="false"
+              class="PuABGQ YRzkuA BMOCzQ EIF_Bg fOwrSw EC2pjw _6Mu4Ow LuBWVA uMo6Kw YnfReg vFBXLA"
+              id="_r_8_"
+              style="--s_rwAw: block; --TPsgaw: 8px; --Wk647Q: 4px;"
+              type="button"
+            >
+              <span
+                class="Ka9auQ"
+                style="--PmK0MA: 8px; --TPF5Nw: center;"
+              >
+                <span
+                  class="aDc6Yg"
+                >
+                  <p
+                    class="VgvqkQ aZskFA T5LNnw"
+                  >
+                    ABC Syntax Reference
+                  </p>
+                </span>
+                <span
+                  class="aDc6Yg oNSf9w"
+                >
+                  <span
+                    aria-hidden="true"
+                    class="NA_Img dkWypw"
+                  >
+                    <svg
+                      fill="none"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="m16.384 9.225-4.207 4.207a.25.25 0 0 1-.353 0L7.623 9.224a.75.75 0 0 0-1.059.002.75.75 0 0 0-.002 1.059l4.201 4.21c.681.68 1.787.678 2.47-.005l4.207-4.207a.75.75 0 0 0 .002-1.059.75.75 0 0 0-1.058.002"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </span>
+                </span>
+              </span>
+            </button>
+          </div>
+          <div
+            aria-labelledby="_r_8_"
+            class="BMOCzQ EC2pjw _6Mu4Ow LuBWVA"
+            id="_r_9_"
+            role="region"
+            style="--s_rwAw: none; --TPsgaw: 8px; --KtVHvQ: 16px;"
+          >
+            <div
+              class="BMOCzQ EC2pjw LuBWVA"
+              style="--gms-pw: 8px;"
+            >
+              <div
+                class="jv_R6g"
+                style="--NZu1Zw: 8px;"
+              >
+                <p
+                  class="JYIidw aZskFA u16U_g"
+                >
+                  <strong>
+                    Header:
+                  </strong>
+                   X:1 (tune #) | T:Title | M:4/4 (meter) | K:C (key)
+                </p>
+                <p
+                  class="JYIidw aZskFA u16U_g"
+                >
+                  <strong>
+                    Notes:
+                  </strong>
+                   C D E F G A B (middle) | c d e f g a b (high) | C, D, (low)
+                </p>
+                <p
+                  class="JYIidw aZskFA u16U_g"
+                >
+                  <strong>
+                    Length:
+                  </strong>
+                   A2=half | A4=whole | A/=eighth | z=rest
+                </p>
+                <p
+                  class="JYIidw aZskFA u16U_g"
+                >
+                  <strong>
+                    Other:
+                  </strong>
+                   |=bar | ^=sharp | _=flat | |: :|=repeat
+                </p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li
+          aria-hidden="true"
+        >
+          <hr
+            class="_PhRSQ"
+          />
+        </li>
+      </ul>
+      <div
+        class="jv_R6g"
+        style="--NZu1Zw: 8px;"
+      >
+        <h4
+          class="_5Gynyg aZskFA u16U_g"
+        >
+          ABC Notation
+        </h4>
+        <div
+          class="SNEyeQ zza16Q Pe8c4g"
+        >
+          <textarea
+            class="bCVoGQ aWBg0w _9EWwZA"
+            dir="auto"
+            placeholder="Enter ABC notation here..."
+            rows="8"
+          >
+            X:1
+T:
+M:4/4
+K:C
+
+          </textarea>
+        </div>
+      </div>
+      <div
+        class="jv_R6g"
+        style="--NZu1Zw: 8px;"
+      >
+        <h4
+          class="_5Gynyg aZskFA u16U_g"
+        >
+          Preview
+        </h4>
+        <div
+          class="BMOCzQ zBi1vw rCi29A EC2pjw LuBWVA"
+          style="--gms-pw: 16px;"
+        >
+          <div
+            class="sheetMusicPreview"
+          />
+        </div>
+      </div>
+      <button
+        class="_5KtATA LQzFZw VgvqkQ _8ERLTg rV61VQ LQzFZw VgvqkQ _4_iekA _3oHQrw j34Zww aqbYPg _3FvZZg"
+        type="button"
+      >
+        <span
+          class="khPe7Q"
+        >
+          Add to Design
+        </span>
+      </button>
+    </div>
+  </div>
+  ,
+</div>
+`;
