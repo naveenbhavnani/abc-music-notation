@@ -60,7 +60,8 @@
 .sheetMusicPreview {
   width: 100%;
   min-height: 100px;
-  overflow-x: auto;
+  max-height: 328px;
+  overflow: auto;
   background-color: #ffffff;
   border-radius: var(--ui-kit-radius-element-standard);
 }
@@ -68,5 +69,35 @@
 .sheetMusicPreview svg {
   width: 100%;
   height: auto;
+  max-width: 100%;
   display: block;
+  object-fit: contain;
+}
+
+/* Syntax reference list */
+.syntaxList {
+  margin: 0;
+  padding-left: var(--ui-kit-space-200);
+  list-style-type: disc;
+}
+
+.syntaxList li {
+  margin-bottom: var(--ui-kit-space-050);
+  display: flex;
+  align-items: baseline;
+  gap: var(--ui-kit-space-075);
+}
+
+.syntaxList li:last-child {
+  margin-bottom: 0;
+}
+
+.syntaxCode {
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--ui-kit-color-surface-secondary-bg);
+  padding: 1px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
 }

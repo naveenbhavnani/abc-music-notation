@@ -8,7 +8,6 @@ import {
   MultilineInput,
   Rows,
   Text,
-  Title,
 } from "@canva/app-ui-kit";
 import { upload } from "@canva/asset";
 import { addElementAtCursor, addElementAtPoint } from "@canva/design";
@@ -38,7 +37,7 @@ export const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasValidNotation, setHasValidNotation] = useState(false);
-  const previewRef = useRef<HTMLDivElement>(null);
+  const _previewRef = useRef<HTMLDivElement>(null);
   const exportRef = useRef<HTMLDivElement>(null);
 
   // Normalize ABC input by trimming leading whitespace from each line
@@ -50,75 +49,48 @@ export const App = () => {
       .join("\n");
   };
 
-  // Render ABC notation whenever input changes
+  // Validate ABC notation whenever input changes
   useEffect(() => {
-    if (previewRef.current) {
-      try {
-        // Clear previous content
-        previewRef.current.innerHTML = "";
+    const normalizedInput = normalizeAbcInput(abcInput);
 
-        const normalizedInput = normalizeAbcInput(abcInput);
+    // Check if there's actual notation (beyond just the header)
+    const hasNotes = normalizedInput.split("\n").some((line) => {
+      const trimmed = line.trim();
+      return (
+        trimmed &&
+        !trimmed.startsWith("X:") &&
+        !trimmed.startsWith("T:") &&
+        !trimmed.startsWith("M:") &&
+        !trimmed.startsWith("L:") &&
+        !trimmed.startsWith("K:") &&
+        !trimmed.startsWith("C:") &&
+        !trimmed.startsWith("Q:") &&
+        !trimmed.startsWith("R:") &&
+        !trimmed.startsWith("N:") &&
+        !trimmed.startsWith("H:") &&
+        !trimmed.startsWith("S:") &&
+        !trimmed.startsWith("O:") &&
+        !trimmed.startsWith("B:") &&
+        !trimmed.startsWith("D:") &&
+        !trimmed.startsWith("Z:") &&
+        !trimmed.startsWith("G:") &&
+        !trimmed.startsWith("F:") &&
+        !trimmed.startsWith("P:") &&
+        !trimmed.startsWith("I:") &&
+        !trimmed.startsWith("W:") &&
+        !trimmed.startsWith("w:") &&
+        !trimmed.startsWith("V:") &&
+        !trimmed.startsWith("%%")
+      );
+    });
 
-        // Only render if there's actual notation (beyond just the header)
-        const hasNotes = normalizedInput.split("\n").some((line) => {
-          const trimmed = line.trim();
-          return (
-            trimmed &&
-            !trimmed.startsWith("X:") &&
-            !trimmed.startsWith("T:") &&
-            !trimmed.startsWith("M:") &&
-            !trimmed.startsWith("L:") &&
-            !trimmed.startsWith("K:") &&
-            !trimmed.startsWith("C:") &&
-            !trimmed.startsWith("Q:") &&
-            !trimmed.startsWith("R:") &&
-            !trimmed.startsWith("N:") &&
-            !trimmed.startsWith("H:") &&
-            !trimmed.startsWith("S:") &&
-            !trimmed.startsWith("O:") &&
-            !trimmed.startsWith("B:") &&
-            !trimmed.startsWith("D:") &&
-            !trimmed.startsWith("Z:") &&
-            !trimmed.startsWith("G:") &&
-            !trimmed.startsWith("F:") &&
-            !trimmed.startsWith("P:") &&
-            !trimmed.startsWith("I:") &&
-            !trimmed.startsWith("W:") &&
-            !trimmed.startsWith("w:") &&
-            !trimmed.startsWith("V:") &&
-            !trimmed.startsWith("%%")
-          );
-        });
-
-        if (hasNotes) {
-          abcjs.renderAbc(previewRef.current, normalizedInput, {
-            responsive: "resize",
-            foregroundColor: "#000000",
-            paddingtop: 30,
-            paddingbottom: 10,
-            paddingleft: 10,
-            paddingright: 10,
-            staffwidth: 280,
-            format: {
-              titlefont: "Arial 16 bold",
-            },
-          });
-          setHasValidNotation(true);
-          setError(null);
-        } else {
-          setHasValidNotation(false);
-        }
-      } catch {
-        setHasValidNotation(false);
-        setError(
-          intl.formatMessage({
-            defaultMessage: "Invalid ABC notation",
-            description: "Error message when ABC notation is invalid",
-          })
-        );
-      }
+    if (hasNotes) {
+      setHasValidNotation(true);
+      setError(null);
+    } else {
+      setHasValidNotation(false);
     }
-  }, [abcInput, intl]);
+  }, [abcInput]);
 
   const handleAddToDesign = async () => {
     if (!addElement || !exportRef.current) {
@@ -246,65 +218,34 @@ export const App = () => {
         }}
       />
       <Rows spacing="2u">
-        {/* Collapsible Cheat Sheet */}
-        <Accordion>
-          <AccordionItem
-            title={intl.formatMessage({
-              defaultMessage: "ABC syntax reference",
-              description: "Title for the ABC notation syntax reference section",
+        {/* Preview - hidden but kept for potential future use */}
+        {/* <Rows spacing="1u">
+          <Text size="medium" variant="bold">
+            {intl.formatMessage({
+              defaultMessage: "Preview",
+              description: "Label for the sheet music preview section",
             })}
+          </Text>
+          <Box
+            background="neutral"
+            borderRadius="standard"
+            padding="2u"
           >
-            <Box padding="1u">
-              <Rows spacing="1u">
-                <Text size="small">
-                  <FormattedMessage
-                    defaultMessage="<b>Header:</b> X:1 (tune #) | T:Title | M:4/4 (meter) | K:C (key)"
-                    description="Header section in ABC notation cheat sheet"
-                    values={{
-                      b: (chunks) => <strong>{chunks}</strong>,
-                    }}
-                  />
-                </Text>
-                <Text size="small">
-                  <FormattedMessage
-                    defaultMessage="<b>Notes:</b> C D E F G A B (middle) | c d e f g a b (high) | C, D, (low)"
-                    description="Notes section in ABC notation cheat sheet"
-                    values={{
-                      b: (chunks) => <strong>{chunks}</strong>,
-                    }}
-                  />
-                </Text>
-                <Text size="small">
-                  <FormattedMessage
-                    defaultMessage="<b>Length:</b> A2=half | A4=whole | A/=eighth | z=rest"
-                    description="Length section in ABC notation cheat sheet"
-                    values={{
-                      b: (chunks) => <strong>{chunks}</strong>,
-                    }}
-                  />
-                </Text>
-                <Text size="small">
-                  <FormattedMessage
-                    defaultMessage="<b>Other:</b> |=bar | ^=sharp | _=flat | |: :|=repeat"
-                    description="Other section in ABC notation cheat sheet"
-                    values={{
-                      b: (chunks) => <strong>{chunks}</strong>,
-                    }}
-                  />
-                </Text>
-              </Rows>
-            </Box>
-          </AccordionItem>
-        </Accordion>
+            <div
+              ref={_previewRef}
+              className={styles.sheetMusicPreview}
+            />
+          </Box>
+        </Rows> */}
 
         {/* ABC Input */}
         <Rows spacing="1u">
-          <Title size="small">
+          <Text size="medium" variant="bold">
             {intl.formatMessage({
               defaultMessage: "ABC notation",
               description: "Label for the ABC notation input field",
             })}
-          </Title>
+          </Text>
           <MultilineInput
             minRows={8}
             maxRows={12}
@@ -317,25 +258,277 @@ export const App = () => {
           />
         </Rows>
 
-        {/* Preview */}
-        <Rows spacing="1u">
-          <Title size="small">
-            {intl.formatMessage({
-              defaultMessage: "Preview",
-              description: "Label for the sheet music preview section",
+        {/* Collapsible Cheat Sheet */}
+        <Accordion>
+          <AccordionItem
+            title={intl.formatMessage({
+              defaultMessage: "ABC syntax reference",
+              description: "Title for the ABC notation syntax reference section",
             })}
-          </Title>
-          <Box
-            background="neutral"
-            borderRadius="standard"
-            padding="2u"
           >
-            <div
-              ref={previewRef}
-              className={styles.sheetMusicPreview}
-            />
-          </Box>
-        </Rows>
+            <Box padding="1u">
+              <Rows spacing="1.5u">
+                {/* Header section */}
+                <Rows spacing="0.5u">
+                  <Text size="medium" variant="bold">
+                    <FormattedMessage
+                      defaultMessage="Header"
+                      description="Header section label in ABC notation cheat sheet"
+                    />
+                  </Text>
+                  <ul className={styles.syntaxList}>
+                    <li>
+                      <span className={styles.syntaxCode}>
+                        <FormattedMessage
+                          defaultMessage="X:1"
+                          description="ABC syntax code for tune number - do not translate"
+                        />
+                      </span>
+                      <Text size="medium">
+                        <FormattedMessage
+                          defaultMessage="Tune number"
+                          description="Tune number description"
+                        />
+                      </Text>
+                    </li>
+                    <li>
+                      <span className={styles.syntaxCode}>
+                        <FormattedMessage
+                          defaultMessage="T:"
+                          description="ABC syntax code for title - do not translate"
+                        />
+                      </span>
+                      <Text size="medium">
+                        <FormattedMessage
+                          defaultMessage="Title"
+                          description="Title description"
+                        />
+                      </Text>
+                    </li>
+                    <li>
+                      <span className={styles.syntaxCode}>
+                        <FormattedMessage
+                          defaultMessage="M:4/4"
+                          description="ABC syntax code for meter - do not translate"
+                        />
+                      </span>
+                      <Text size="medium">
+                        <FormattedMessage
+                          defaultMessage="Meter"
+                          description="Meter description"
+                        />
+                      </Text>
+                    </li>
+                    <li>
+                      <span className={styles.syntaxCode}>
+                        <FormattedMessage
+                          defaultMessage="K:C"
+                          description="ABC syntax code for key - do not translate"
+                        />
+                      </span>
+                      <Text size="medium">
+                        <FormattedMessage
+                          defaultMessage="Key"
+                          description="Key description"
+                        />
+                      </Text>
+                    </li>
+                  </ul>
+                </Rows>
+
+                {/* Notes section */}
+                <Rows spacing="0.5u">
+                  <Text size="medium" variant="bold">
+                    <FormattedMessage
+                      defaultMessage="Notes"
+                      description="Notes section label in ABC notation cheat sheet"
+                    />
+                  </Text>
+                  <ul className={styles.syntaxList}>
+                    <li>
+                      <span className={styles.syntaxCode}>
+                        <FormattedMessage
+                          defaultMessage="C D E F G A B"
+                          description="ABC syntax for middle octave notes - do not translate"
+                        />
+                      </span>
+                      <Text size="medium">
+                        <FormattedMessage
+                          defaultMessage="Middle octave"
+                          description="Middle octave notes"
+                        />
+                      </Text>
+                    </li>
+                    <li>
+                      <span className={styles.syntaxCode}>
+                        <FormattedMessage
+                          defaultMessage="c d e f g a b"
+                          description="ABC syntax for high octave notes - do not translate"
+                        />
+                      </span>
+                      <Text size="medium">
+                        <FormattedMessage
+                          defaultMessage="High octave"
+                          description="High octave notes"
+                        />
+                      </Text>
+                    </li>
+                    <li>
+                      <span className={styles.syntaxCode}>
+                        <FormattedMessage
+                          defaultMessage="C, D,"
+                          description="ABC syntax for low octave notes - do not translate"
+                        />
+                      </span>
+                      <Text size="medium">
+                        <FormattedMessage
+                          defaultMessage="Low octave"
+                          description="Low octave notes"
+                        />
+                      </Text>
+                    </li>
+                  </ul>
+                </Rows>
+
+                {/* Length section */}
+                <Rows spacing="0.5u">
+                  <Text size="medium" variant="bold">
+                    <FormattedMessage
+                      defaultMessage="Length"
+                      description="Length section label in ABC notation cheat sheet"
+                    />
+                  </Text>
+                  <ul className={styles.syntaxList}>
+                    <li>
+                      <span className={styles.syntaxCode}>
+                        <FormattedMessage
+                          defaultMessage="A2"
+                          description="ABC syntax for half note - do not translate"
+                        />
+                      </span>
+                      <Text size="medium">
+                        <FormattedMessage
+                          defaultMessage="Half note"
+                          description="Half note description"
+                        />
+                      </Text>
+                    </li>
+                    <li>
+                      <span className={styles.syntaxCode}>
+                        <FormattedMessage
+                          defaultMessage="A4"
+                          description="ABC syntax for whole note - do not translate"
+                        />
+                      </span>
+                      <Text size="medium">
+                        <FormattedMessage
+                          defaultMessage="Whole note"
+                          description="Whole note description"
+                        />
+                      </Text>
+                    </li>
+                    <li>
+                      <span className={styles.syntaxCode}>
+                        <FormattedMessage
+                          defaultMessage="A/"
+                          description="ABC syntax for eighth note - do not translate"
+                        />
+                      </span>
+                      <Text size="medium">
+                        <FormattedMessage
+                          defaultMessage="Eighth note"
+                          description="Eighth note description"
+                        />
+                      </Text>
+                    </li>
+                    <li>
+                      <span className={styles.syntaxCode}>
+                        <FormattedMessage
+                          defaultMessage="z"
+                          description="ABC syntax for rest - do not translate"
+                        />
+                      </span>
+                      <Text size="medium">
+                        <FormattedMessage
+                          defaultMessage="Rest"
+                          description="Rest description"
+                        />
+                      </Text>
+                    </li>
+                  </ul>
+                </Rows>
+
+                {/* Symbols section */}
+                <Rows spacing="0.5u">
+                  <Text size="medium" variant="bold">
+                    <FormattedMessage
+                      defaultMessage="Symbols"
+                      description="Symbols section label in ABC notation cheat sheet"
+                    />
+                  </Text>
+                  <ul className={styles.syntaxList}>
+                    <li>
+                      <span className={styles.syntaxCode}>
+                        <FormattedMessage
+                          defaultMessage="|"
+                          description="ABC syntax for bar line - do not translate"
+                        />
+                      </span>
+                      <Text size="medium">
+                        <FormattedMessage
+                          defaultMessage="Bar line"
+                          description="Bar line description"
+                        />
+                      </Text>
+                    </li>
+                    <li>
+                      <span className={styles.syntaxCode}>
+                        <FormattedMessage
+                          defaultMessage="^"
+                          description="ABC syntax for sharp - do not translate"
+                        />
+                      </span>
+                      <Text size="medium">
+                        <FormattedMessage
+                          defaultMessage="Sharp"
+                          description="Sharp description"
+                        />
+                      </Text>
+                    </li>
+                    <li>
+                      <span className={styles.syntaxCode}>
+                        <FormattedMessage
+                          defaultMessage="_"
+                          description="ABC syntax for flat - do not translate"
+                        />
+                      </span>
+                      <Text size="medium">
+                        <FormattedMessage
+                          defaultMessage="Flat"
+                          description="Flat description"
+                        />
+                      </Text>
+                    </li>
+                    <li>
+                      <span className={styles.syntaxCode}>
+                        <FormattedMessage
+                          defaultMessage="|: :|"
+                          description="ABC syntax for repeat - do not translate"
+                        />
+                      </span>
+                      <Text size="medium">
+                        <FormattedMessage
+                          defaultMessage="Repeat"
+                          description="Repeat description"
+                        />
+                      </Text>
+                    </li>
+                  </ul>
+                </Rows>
+              </Rows>
+            </Box>
+          </AccordionItem>
+        </Accordion>
 
         {/* Error message */}
         {error && (
